@@ -8,6 +8,9 @@ contract crowdFunding{
     uint256 public campaign_deadline;
     address public campaign_owner;
 
+    enum campaignState {Active, Successful, Failed} 
+    campaignState public state;
+
     struct tier{
         string tier_name;
         uint256 amount;
@@ -21,24 +24,31 @@ contract crowdFunding{
         _; 
     }
 
+    modifier campaignOpen(){
+        require(state==campaignState.Active, "Campaign is not active");
+        _;
+    }
+
     constructor(string memory name, string memory description, uint256 goal, uint256 durationInDays){
         campaign_name=name;
         campaign_description=description;
         goal_amount=goal;
         campaign_deadline=block.timestamp+(durationInDays*1 days);
         campaign_owner=msg.sender;
+        state=campaignState.Active;
     }
 
-    function fund(uint256 tierIndex) public payable {
-        require(block.timestamp<campaign_deadline, "Sorry campagin has ended");
+    function fund(uint256 tierIndex) public payable campaignOpen {
         require(tierIndex<tiers.length, "Invalid Tier");
         require(msg.value==tiers[tierIndex].amount, "Invalid amount backed");
 
         tiers[tierIndex].backers++;
+        checkAndUpdateCampaignState();
     }
 
     function withdraw() public onlyOwner {
-        require(address(this).balance>=goal_amount, "Goal not completed yet");
+        checkAndUpdateCampaignState();
+        require(state==campaignState.Successful, "Campaign not successful");
 
         uint256 balance=address(this).balance;
         require(balance>0, "Nothing to withdraw");
@@ -59,5 +69,15 @@ contract crowdFunding{
         require(index<tiers.length, "Tier does not exist");
         tiers[index]=tiers[tiers.length-1];
         tiers.pop();
+    }
+
+    function checkAndUpdateCampaignState() internal{
+        if(state==campaignState.Active){
+            if(block.timestamp>=campaign_deadline){
+                state=address(this).balance>=goal_amount? campaignState.Successful: campaignState.Failed;
+            }else{
+                state=address(this).balance>=goal_amount? campaignState.Successful: campaignState.Active;
+            }
+        }
     }
 }
