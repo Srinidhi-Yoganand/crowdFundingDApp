@@ -3,7 +3,8 @@ script/
 .states/
 .deps/
 contracts/
-.prettierrc.json
 
 !contracts/crowdFunding.sol
 !contracts/crowdFundingFactory.sol
+
+.prettierrc.json
