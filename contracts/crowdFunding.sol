@@ -41,12 +41,12 @@ contract crowdFunding{
         _;
     }
 
-    constructor(string memory name, string memory description, uint256 goal, uint256 durationInDays){
+    constructor(address owner, string memory name, string memory description, uint256 goal, uint256 durationInDays){
         campaign_name=name;
         campaign_description=description;
         goal_amount=goal;
         campaign_deadline=block.timestamp+(durationInDays*1 days);
-        campaign_owner=msg.sender;
+        campaign_owner=owner;
         state=campaignState.Active;
     }
 
