@@ -7,6 +7,7 @@ contract crowdFunding{
     uint256 public goal_amount;
     uint256 public campaign_deadline;
     address public campaign_owner;
+    bool public campaign_paused;
 
     enum campaignState {Active, Successful, Failed} 
     campaignState public state;
@@ -35,6 +36,11 @@ contract crowdFunding{
         _;
     }
 
+    modifier notPaused(){
+        require(!campaign_paused, "Campaign is paused");
+        _;
+    }
+
     constructor(string memory name, string memory description, uint256 goal, uint256 durationInDays){
         campaign_name=name;
         campaign_description=description;
@@ -44,7 +50,7 @@ contract crowdFunding{
         state=campaignState.Active;
     }
 
-    function fund(uint256 tierIndex) public payable campaignOpen {
+    function fund(uint256 tierIndex) public payable campaignOpen notPaused {
         require(tierIndex<tiers.length, "Invalid Tier");
         require(msg.value==tiers[tierIndex].amount, "Invalid amount backed");
 
@@ -92,7 +98,7 @@ contract crowdFunding{
 
     function refund() public {
         checkAndUpdateCampaignState();
-        //require(state==campaignState.Failed, "Campaign is not failed");
+        require(state==campaignState.Failed, "Campaign is not failed");
 
         uint256 amount=backers[msg.sender].total_contribution;
         require(amount>0, "No contribution to refund");
@@ -103,5 +109,24 @@ contract crowdFunding{
 
     function hasFundedTier(address backer_address, uint256 tierIndex) public view returns (bool){
         return backers[backer_address].fundedTiers[tierIndex];
+    }
+
+    function getTiers() public view returns (tier[] memory){
+        return tiers;
+    }
+
+    function tooglePause() public onlyOwner {
+        campaign_paused=!campaign_paused;
+    }
+
+    function getCampaignStatus() public view returns (campaignState) {
+        if(state==campaignState.Active && block.timestamp>campaign_deadline){
+            return address(this).balance>=goal_amount?campaignState.Successful:campaignState.Failed;
+        }
+        return state;
+    }
+
+    function extendDeadline(uint256 daysToAdd) public onlyOwner {
+        campaign_deadline+=daysToAdd*1 days;
     }
 }

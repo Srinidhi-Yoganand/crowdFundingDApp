@@ -121,6 +121,32 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "campaign_paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "daysToAdd",
+						"type": "uint256"
+					}
+				],
+				"name": "extendDeadline",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -135,12 +161,55 @@
 			},
 			{
 				"inputs": [],
+				"name": "getCampaignStatus",
+				"outputs": [
+					{
+						"internalType": "enum crowdFunding.campaignState",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "getContractBalance",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTiers",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "tier_name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "backers",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct crowdFunding.tier[]",
+						"name": "",
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -247,6 +316,13 @@
 			},
 			{
 				"inputs": [],
+				"name": "tooglePause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "withdraw",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -281,11 +357,11 @@
 	},
 	"sources": {
 		"contracts/crowdFunding.sol": {
-			"keccak256": "0xc458f76127aa72c4a6ae85bf2aa12f145860c7425cb31fd30a234138751c24c4",
+			"keccak256": "0x4f865e32f27ac6e098d195ce0ece664bf66f834314919fe3641ea7157e500e10",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0b5ad25e5425fee6f4fa81a57b92157738d534e4adb227f980cf3a8aca62bccd",
-				"dweb:/ipfs/QmYt5GFhP5L1bDeEPWpyZ7cDmDD5B6Ffi34hhYMTSwjQhW"
+				"bzz-raw://e499ba5614773dddf9ae1f8efc0480dc8f272671dbced8b43487075481c922b4",
+				"dweb:/ipfs/Qmbt9z1EW9m4ZSce8qSfxYcnCNaYxhNpsV4HFuGcqSqYZt"
 			]
 		}
 	},
