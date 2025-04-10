@@ -25,7 +25,6 @@ This project is built using Solidity and deployed on a local Ethereum developmen
     - **Contribute to tiers**: A campaign owner can define multiple funding tiers, each with a specified amount. Backers can fund campaigns by contributing to one of the available tiers.
     - **Withdraw funds**: If a campaign reaches its goal by the deadline, the owner can withdraw the funds.
     - **Refund**: If the campaign fails (goal amount not reached by the deadline), backers can claim refunds.
-<br>
 
 2. **crowdFundingContract (Factory Contract)**
 
